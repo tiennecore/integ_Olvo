@@ -10,15 +10,7 @@ class CommandsController < ApplicationController
   end
 
   def historique
-    @commands=nil
-    if params[:search]
-      if !current_user.admin?
-        @commands = Command.search(params[:search]).where({usercommand: current_user})
-      else
-        @commands = Command.search(params[:search])
-      end
-    end
-    front_date(@commands)
+    
   end
 
 # gestion des affichage par dateFinal

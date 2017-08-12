@@ -1,104 +1,25 @@
 <div class="container">
-  <div class="row">
-    <div class="col-xs-12"></div>
-  </div>
-  <div class="row">
-    <div class="col-xs-3"></div>
-    <div class="col-xs-6">
-      <p id="notice"><%= notice %></p>
-      <%= flash[:alert]%>
-      <%=form_tag historique_path, :method => 'get' do%>
-        <p>
-          <%= date_select_tag :search, :discard_day => true, :start_year => Date.today.year, :end_year => (Date.today.year+10), :use_month_numbers => true, params[:search] %>
-          <%= submit_tag "Search"%>
-        </p>
-
-      <%end%>
+  <%= form_for(@command) do |f| %>
+    <% if command.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= pluralize(command.errors.count, "error") %> prohibited this command from being saved:</h2>
+        <ul>
+        <% command.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+        </ul>
+      </div>
+    <% end %>
+    <div class="row">
+      <div class="col-sm-8 field">
+        <p>Choisiser une date </p><br><br>
+        <%= f.date_select :dateEnter , class: "form-control" %>
+        <%= options_for_select([['Janvier', 1], ['Fevrier', 2]], 2) %>
+      </div>
+      <div class="col-sm-7 action">
+        <%= f.submit "récupérer vos commandes",class: "btn btn-large btn-primary"%>
+      </div>
     </div>
-    <div class="col-xs-3"></div>
-  </div>
+
+  <% end %>
 </div>
-
-
-<% @listDate.each do |date| %>
-  <h2><%= date %> </h2>
-  <div class="media">
-    <div class="media-body">
-      <table class="table table-hover ">
-        <thead>
-          <tr>
-            <th class="text-center">adresse</th>
-            <th class="text-center">zipcode</th>
-            <th class="text-center">date</th>
-            <th class="text-center">date modifié</th>
-            <th class="text-center">ASAP</th>
-            <th class="text-center">prix</th>
-            <th class="text-center">unité</th>
-            <th class="text-center">commentaire</th>
-            <th class="text-center">état</th>
-            <% if current_user.admin == true %>
-              <th class="text-center">User</th>
-            <% end %>
-            <th colspan="4"></th>
-          </tr>
-        </thead>
-
-        <tbody>
-          <% @commands.each do |command| %>
-            <% if  command.dateBegin == date%>
-              <% if command.dateBegin.strftime("%d/%m/%Y") > DateTime.now.strftime("%d/%m/%Y") %>
-                <tr class="active text-center">
-              <% elsif command.dateBegin.strftime("%d/%m/%Y") == DateTime.now.strftime("%d/%m/%Y") %>
-                <tr class="warning text-center ">
-              <% else %>
-                <tr class="danger text-center ">
-              <% end %>
-                <td><%= command.adress %></td>
-                <td><%= command.zipcode %></td>
-                <td><%= command.dateBegin %></td>
-                <td><%= command.dateEnd %></td>
-                <% if command.asap != nil %>
-                  <td>fils</td>
-                <% else %>
-                  <td> </td>
-                <% end %>
-                <td><%= command.price %></td>
-                <td><%= command.unit %></td>
-                <td><%= command.commentaire %></td>
-                <% if command.statewait != true && command.statedone != true %>
-                  <td>En attente</td>
-                <% end %>
-                <% if command.statewait == true && command.statedone != true %>
-                  <td>En livraison</td>
-                <% end %>
-                <% if command.statedone == true %>
-                  <td>Livré</td>
-                <% end %>
-                <% if current_user.admin == true %>
-                  <td><%= command.usercommand%></td>
-                <% end %>
-                <td><%= link_to 'Show', command, class:'btn btn-primary btn-sm' %></td>
-                <% if (command.statewait != true && command.statedone != true) || current_user.admin == true %>
-                  <td><%= link_to 'Edit', edit_command_path(command), class:'btn btn-warning btn-sm' %></td>
-                  <td><%= link_to 'Destroy', command, method: :delete, data: { confirm: 'Are you sure?' }, class:'btn btn-danger btn-sm' %></td>
-                <% end %>
-              </tr>
-            <% end %>
-          <% end %>
-        </tbody>
-      </table>
-    </div>
-  </div> <br>
-<% end %>
-<h3>Import Commandes</h3>
-<%= form_tag import_commands_path, multipart: true do %>
-  <%= file_field_tag :file %>
-  <%= submit_tag "Upload Commandes" %>
-<% end %>
-<p>
-  Download:
-  <%= link_to "CSV", commands_export_path(format: "csv") %> |
-  <%= link_to "Excel", commands_export_path(format: "xls") %>
-</p>
-
-<br>
