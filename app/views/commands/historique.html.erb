@@ -1,25 +1,103 @@
+
 <div class="container">
-  <%= form_for(@command) do |f| %>
-    <% if command.errors.any? %>
-      <div id="error_explanation">
-        <h2><%= pluralize(command.errors.count, "error") %> prohibited this command from being saved:</h2>
-        <ul>
-        <% command.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-        </ul>
-      </div>
-    <% end %>
-    <div class="row">
-      <div class="col-sm-8 field">
-        <p>Choisiser une date </p><br><br>
-        <%= f.date_select :dateEnter , class: "form-control" %>
-        <%= options_for_select([['Janvier', 1], ['Fevrier', 2]], 2) %>
-      </div>
-      <div class="col-sm-7 action">
-        <%= f.submit "récupérer vos commandes",class: "btn btn-large btn-primary"%>
-      </div>
+  <div class="row">
+      <h1 class="titre1">Historique des commandes</h1>
+    <br>
+    <h3 class="titre2"></h3> <h2 class="titre3"> <%= @prixTotal %> €</h2>
+  </div><br>
+  <div class="row">
+    <div class="col-sm-4 field">
+
+    </div>
+    <div class="col-sm-5 field">
+      <%= form_tag commands_historique_path,:method => 'get' do %>
+        <%= month_field_tag :begin, params[:begin]%>
+        <%= submit_tag "rechercher",class:"btn btn-small btn-primary"%>
+        Download:
+        <%= link_to "CSV", commands_export_path(format: "csv") %>
+
+      <% end %>
+
     </div>
 
+  </div>
+
+  <% @listDate.each do |date| %>
+    <h2><%= date.strftime("%d/%m/%Y") %> </h2>
+    <div class="media">
+      <div class="media-body">
+        <table class="table table-hover ">
+          <thead>
+            <tr>
+              <th class="text-center">Adresse</th>
+              <th class="text-center">Zipcode</th>
+              <th class="text-center">Date</th>
+              <th class="text-center">Date modifié</th>
+              <th class="text-center">From</th>
+              <th class="text-center">To</th>
+              <th class="text-center">Format</th>
+              <th class="text-center">Prix</th>
+              <th class="text-center">Unité</th>
+              <th class="text-center">Commentaire</th>
+              <th class="text-center">État</th>
+              <% if current_user.admin == true %>
+                <th class="text-center">User</th>
+              <% end %>
+              <th colspan="4"></th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <% @commands.each do |command| %>
+              <% if  command.dateFinal.strftime("%d/%m/%Y") == date.strftime("%d/%m/%Y")%>
+                <% if command.dateFinal.strftime("%d/%m/%Y") > DateTime.now.strftime("%d/%m/%Y") %>
+                  <tr class="active text-center">
+                <% elsif command.dateFinal.strftime("%d/%m/%Y") == DateTime.now.strftime("%d/%m/%Y") %>
+                  <tr class="warning text-center ">
+                <% else %>
+                  <tr class="danger text-center ">
+                <% end %>
+                  <td><%= command.adress %></td>
+                  <td><%= command.zipcode %></td>
+                  <td><%= command.dateFinal.strftime("%d/%m/%Y") %></td>
+                  <td><%= command.dateModif.strftime("%d/%m/%Y") if command.dateModif? %></td>
+                  <td><%= command.timeFinalFrom.strftime("%Hh%M")   %></td>
+                  <td><%= command.timeFinalTo.strftime("%Hh%M")  %></td>
+                  <% if command.asap != nil %>
+                    <td>ASAP</td>
+                  <% else %>
+                    <td> </td>
+                  <% end %>
+                  <td><%= command.price %></td>
+                  <td><%= command.unit %></td>
+                  <td><%= command.commentaire %></td>
+                  <% if command.statewait != true && command.statedone != true %>
+                    <td>En attente</td>
+                  <% end %>
+                  <% if command.statewait == true && command.statedone != true %>
+                    <td>En livraison</td>
+                  <% end %>
+                  <% if command.statedone == true %>
+                    <td>Livré</td>
+                  <% end %>
+                  <% if current_user.admin == true %>
+                    <td><%= command.usercommand%></td>
+                  <% end %>
+                  <% if (command.statewait != true && command.statedone != true) || current_user.admin == true %>
+                    <td><%= link_to 'Edit', edit_command_path(command), class:'btn btn-warning btn-sm' %></td>
+                    <td><%= link_to 'Destroy', command, method: :delete, data: { confirm: 'Are you sure?' }, class:'btn btn-danger btn-sm' %></td>
+                  <% end %>
+                </tr>
+              <% end %>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div> <br>
   <% end %>
+  <br><br>
+
+
+
+  <br>
 </div>

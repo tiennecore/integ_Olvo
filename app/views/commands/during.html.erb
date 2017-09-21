@@ -1,6 +1,6 @@
 <div class="container">
   <div class="titre">
-    <h1 class="titre1">Commandes en attente</h1>
+    <h1 class="titre1">Commandes en cours</h1>
 
 
     <br>
@@ -45,7 +45,7 @@
                   <td><%= command.adress %></td>
                   <td><%= command.zipcode %></td>
                   <td><%= command.dateFinal.strftime("%d/%m/%Y") %></td>
-                  <td><%= command.dateModif.strftime("%d/%m/%Y") if command.timeModifFrom.present?%></td>
+                  <td><%= command.dateModif.strftime("%d/%m/%Y") if command.dateModif?%></td>
                   <td><%= command.timeFinalFrom.strftime("%Hh%M")   %></td>
                   <td><%= command.timeFinalTo.strftime("%Hh%M")  %></td>
                   <% if command.asap != nil %>

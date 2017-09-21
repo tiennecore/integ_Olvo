@@ -45,7 +45,7 @@
                   <td><%= command.adress %></td>
                   <td><%= command.zipcode %></td>
                   <td><%= command.dateFinal.strftime("%d/%m/%Y") %></td>
-                  <td><%= command.dateModif.strftime("%d/%m/%Y") if command.timeModifFrom.present?%></td>
+                  <td><%= command.dateModif.strftime("%d/%m/%Y") if command.dateModif? %></td>
                   <td><%= command.timeFinalFrom.strftime("%Hh%M")   %></td>
                   <td><%= command.timeFinalTo.strftime("%Hh%M")  %></td>
                   <% if command.asap != nil %>
@@ -55,7 +55,11 @@
                   <% end %>
                   <td><%= command.price %></td>
                   <td><%= command.unit %></td>
-                  <td><%= command.commentaire %></td>
+                  <td>
+                    <% if command.commentaire? %>
+                      <%= link_to('Popover test', '#', class: "popover", rel: "popover", :title => "commentaire") %>
+                    <% end %>
+                  </td>
                   <% if command.statewait != true && command.statedone != true %>
                     <td>En attente</td>
                   <% end %>
@@ -68,6 +72,7 @@
                   <% if current_user.admin == true %>
                     <td><%= command.usercommand%></td>
                   <% end %>
+
                   <% if (command.statewait != true && command.statedone != true) || current_user.admin == true %>
                     <td><%= link_to 'Edit', edit_command_path(command), class:'btn btn-warning btn-sm' %></td>
                     <td><%= link_to 'Destroy', command, method: :delete, data: { confirm: 'Are you sure?' }, class:'btn btn-danger btn-sm' %></td>
@@ -82,10 +87,4 @@
   <% end %>
   <br><br>
 
-  <p>
-    Download:
-    <%= link_to "CSV", commands_export_path(format: "csv") %>
-  </p>
-
-  <br>
 </div>

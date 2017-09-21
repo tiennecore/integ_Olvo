@@ -21,9 +21,38 @@
 .head{ height:150px;}
 .picture{
   width:20%;
-  padding-left: 5%;
+  margin-left: 5%;
+  margin-top: 2%;
+}
+.picturetuto {
+  width:20%;
+  margin-left: 10%;
+  margin-top: 2%;
+}
+.imageAcceuil{
+  width:70%;
+  padding-left: 20%;
+  padding-top: 7%;
+}
+.texteImage{
+  float:right;
   padding-top: 2%;
 }
+
+.rectangletexte {
+  margin-top: 8%;
+  width: 80%;
+  height: 200%;
+  border-radius: 0px 25px 25px 0px;
+
+  background: #ff2463;
+
+}
+.textepresent {
+  color: white;
+  text-align: center;
+}
+
 
 .dropdown {
     position: fixed;
@@ -114,6 +143,60 @@ body{ background-color: #f2f2f2; }
             </div>
           </div>
         </div>
+    <% else %>
+      <div class="imageAcceuil">
+        <%= image_tag "logo-final.svg" %>
+        <p class="texteImage">Présentation logistique</p>
+      </div>
+      <div class="infotexte">
+        <div class="rectangletexte">
+          <div class="container">
+            <div class="row">
+              <div class="col-sm-2">
+              </div>
+              <div class="col-sm-4">
+                <br><br><h5 class="textepresent">Livraisons volumineuses ?</h5><br><br>
+                <p class="textepresent">
+                  Votre service nécessite des livraisons tout au long de la semaine ?
+                  Nous sommes heureux de travailler avec vous pour répondre au mieux à vos horaires et besoins.
+
+                  Nous opérons à l'aide de vélos cargos, 7 jours sur 7 de 8H a 23H.
+                <p><br><br>
+              </div>
+              <div class="col-sm-2">
+              </div>
+              <div class="col-sm-2 field">
+                <h2>Log in</h2>
+                <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+                  <div class="field">
+                    <%= f.label :email %><br />
+                    <%= f.email_field :email, autofocus: true, class: "form-control"  %>
+                  </div>
+
+                  <div class="field">
+                    <%= f.label :password %><br />
+                    <%= f.password_field :password, autocomplete: "off", class: "form-control"  %>
+                  </div>
+
+                  <% if devise_mapping.rememberable? -%>
+                    <div class="field">
+                      <%= f.check_box :remember_me %>
+                      <%= f.label :remember_me %>
+                    </div>
+                  <% end -%>
+
+                  <div class="actions">
+                    <%= f.submit "Log in", class:'btn btn-info btn-sm' %>
+                  </div>
+                <% end %>
+
+                <%= render "devise/shared/links" %>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
 
     <% end %>
 

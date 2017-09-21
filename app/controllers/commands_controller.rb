@@ -10,12 +10,19 @@ class CommandsController < ApplicationController
   end
 
   def historique
-    
+    @current_user=current_user
+    @prixTotal=0
+    @commands=@current_user.commands.where(["dateFinal LIKE ? ","%#{params[:begin]}%"])
+    front_date(@commands)
+    @commands.each do |commande|
+      @prixTotal += (commande.price * commande.unit)
+    end
   end
 
 # gestion des affichage par dateFinal
   def front_date (list)
     @listDate = []
+
     if !list.empty?
       firstDate = list.first.dateFinal
       list.each do |element|
@@ -90,13 +97,16 @@ class CommandsController < ApplicationController
     #création de liste de date pour l'affichage et le tri des commandes
     front_date(@commands)
   end
+  def tuto
+
+  end
 
   def export
 
-    commands = Command.all.where({dateFinal: "2017-06-31"})
+    commands = Command.all
     commands.each do |c|
-      if current_user.admin != true
-        commands = Command.all.where({dateFinal: "2017-06-30",usercommand: current_user.username})
+      if !current_user.admin?
+        commands = Command.all.where({usercommand: current_user.username})
       end
     end
     if !commands.nil?
@@ -129,7 +139,6 @@ class CommandsController < ApplicationController
   def create
 
     @user=current_user
-
     @command = @user.commands.new(command_params)
     @command.statewait=false
     @command.statedone=false
@@ -142,40 +151,40 @@ class CommandsController < ApplicationController
         @command.price = current_user.price2
       end
     end
+    date_actuel = DateTime.now
+    # cas de non ajout de la date
+    if @command.dateFinal == nil
+      @command.dateEnter = date_actuel
+      @command.asap = 1
+    end
+    if @command.timeEnterFrom == nil
+      @command.timeEnterFrom = date_actuel.change(hour: 11, min: 0)
+    end
+    if @command.timeEnterTo == nil
+      @command.timeEnterTo = date_actuel.change(hour: 24, min: 0)
+    end
+
     #initialisation de la date normal selectionner
     @command.usercommand = current_user.username
     @command.dateFinal = @command.dateEnter
     @command.timeFinalFrom = @command.timeEnterFrom
+    @command.timeFinalTo = @command.timeEnterTo
 
-    if @command.timeFinalFrom < @command.timeEnterTo
-      @command.timeFinalTo = @command.timeEnterTo
-    else
-      @command.timeFinalTo = @command.dateFinal.change(hour:20)
-    end
-    #si modification lor de la création de l'admin
-    if current_user.admin?
-      @command.dateFinal = @command.dateModif
-      @command.timeFinalFrom = @command.timeModifFrom
-      @command.timeFinalTo = @command.timeModifTo
-    end
-    # cas de non ajout de la date
-    if @command.dateFinal <= DateTime.now
-      @command.dateFinal = DateTime.now
-      @command.timeFinalFrom = @command.timeFinalTo.change(hour:9)
-      @command.timeFinalTo = @command.timeFinalTo.change(hour:22)
-      @command.asap = 1
-    end
     # cas d'inversion de des horaires
-    if @command.timeFinalFrom > @command.timeFinalTo
-      tmpdate=@command.timeFinalFrom
-      @command.timeFinalFrom = @command.timeFinalTo
-      @command.timeFinalTo = tmpdate
+    if @command.dateEnter?
+      if @command.timeFinalFrom > @command.timeFinalTo && @command.dateEnter?
+        tmpdate=@command.dateFinal
+        tmpdate=@command.timeFinalFrom
+        @command.timeFinalFrom = @command.timeFinalTo
+        @command.timeFinalTo = tmpdate
+      end
     end
+
 
     respond_to do |format|
       if @command.save
         #CommandNotifierMailer.send_signup_email(@user,@command).deliver
-        format.html { redirect_to commands_url, notice: 'Command was successfully created.' }
+        format.html { redirect_to commands_url, notice: 'La commande a été créée.' }
       else
         format.html { render :new }
         format.json { render json: @command.errors, status: :unprocessable_entity }
@@ -183,30 +192,28 @@ class CommandsController < ApplicationController
     end
   end
 
-  def day
-
-  end
   # PATCH/PUT /commands/1
   # PATCH/PUT /commands/1.json
   def update
-    if @command.dateModif.present?
-        @command.dateFinal = @command.timeModifFrom
+    if @command.dateModif != nil
+        @command.dateFinal = @command.dateModif
     end
-    if @command.timeModifTo.present?
+    if @command.timeModifFrom?
+        @command.timeFinalFrom = @command.timeModifFrom
+    end
+    if @command.timeModifTo?
         @command.timeFinalTo = @command.timeModifTo
     end
 
-    if @command.dateFinal > @command.timeFinalTo
-      tmpdate=@command.dateFinal
-      @command.dateFinal = @command.timeFinalTo
+    if @command.timeFinalFrom > @command.timeFinalTo
+      tmpdate=@command.timeFinalFrom
+      @command.timeFinalFrom = @command.timeFinalTo
       @command.timeFinalTo = tmpdate
-      @command.timeEnterFrom = @command.dateFinal
-      @command.timeEnterTo = @command.timeFinalTo
     end
 
     respond_to do |format|
       if @command.update(command_params)
-        format.html { redirect_to commands_during_url, notice: 'Command was successfully updated.' }
+        format.html { redirect_to commands_during_url, notice: 'La commande a été modifier.' }
 
       else
         format.html { render :edit }
@@ -216,6 +223,7 @@ class CommandsController < ApplicationController
   end
 
   def import
+    @current_user = current_user
     current_user.commands.import(params[:file])
   end
 
@@ -225,7 +233,7 @@ class CommandsController < ApplicationController
   def destroy
     @command.destroy
     respond_to do |format|
-      format.html { redirect_to commands_url, notice: 'Command was successfully destroyed.' }
+      format.html { redirect_to commands_url, notice: 'La commande a été détruite.' }
       format.json { head :no_content }
     end
   end
@@ -235,7 +243,6 @@ class CommandsController < ApplicationController
     def set_command
       @command = Command.find(params[:id])
     end
-
     # Never trust parameters from the scary internet, only allow the white list through.
     def command_params
 

@@ -40,8 +40,8 @@ gem 'devise'
 gem 'devise-i18n'
 group :production do
 
-  gem 'pg'
-  ruby "2.4.0"
+  gem 'pg', '~> 0.21.0'
+  ruby "2.4.2"
 end
 
 group :development, :test do
