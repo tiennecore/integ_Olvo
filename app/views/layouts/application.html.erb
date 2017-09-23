@@ -1,35 +1,205 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>OLVO</title>
+    <title>Olvo</title>
     <%= csrf_meta_tags %>
 
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
+  <style>
+.dropbtn {
+    background-color: #ff2463;
+    color: white;
+    padding: 16px;
+    font-size: 16px;
+    margin-left: 0px;
+    border: none;
+    cursor: pointer;
+    border-radius: 25px 0px 0px 25px;
+}
+.head{ height:150px;}
+.picture{
+  width:20%;
+  margin-left: 5%;
+  margin-top: 2%;
+}
+.picturetuto {
+  width:20%;
+  margin-left: 10%;
+  margin-top: 2%;
+}
+.imageAcceuil{
+  width:70%;
+  padding-left: 20%;
+  padding-top: 7%;
+}
+.texteImage{
+  float:right;
+  padding-top: 2%;
+}
+
+.rectangletexte {
+  margin-top: 8%;
+  width: 80%;
+  height: 200%;
+  border-radius: 0px 25px 25px 0px;
+
+  background: #ff2463;
+
+}
+.textepresent {
+  color: white;
+  text-align: center;
+}
+
+
+.dropdown {
+    position: fixed;
+    display: inline-block;
+    width: auto;
+    right: 0;
+    padding-top:3%;
+}
+.titre1{
+  text-align: center;
+}
+.titre3 {
+  text-align: center;
+  font-size: 10em;
+  font-weight: bold;
+}
+.euro{
+  font-size: 5em;
+  font-weight: bold;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    border-radius: 25px 0px 0px 25px;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+.dropdown-content a:first-child{ border-radius: 25px 0px 0px 0px;}
+.dropdown-content a:last-child{border-radius: 0px 0px 0px 25px;}
+body{ background-color: #f2f2f2; }
+.dropdown-content a:hover {background-color: #f1f1f1}
+.dropdown:hover .dropdown-content { display: block; }
+.container{
+
+}
+</style>
 
   <body>
-    <% if flash[:notice] %>
-      <div class="alert alert-success">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-        <%= flash[:notice] %>
-      </div>
-    <% elsif flash[:error] %>
-      <div class="alert alert-error">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-        <%= flash[:error] %>
-      </div>
-    <% elsif flash[:alert] %>
-      <div class="alert">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-        <%= flash[:alert] %>
-      </div>
-    <% end %>
-    <% if user_signed_in? %>
-      <% if current_user.admin? %>
-        <%= link_to('gestion des utilisateur', rails_admin_path) %>
+    <div class="head">
+      <% if flash[:notice] %>
+        <div class="alert alert-success">
+          <button type="button" class="close" data-dismiss="alert">&times;</button>
+          <%= flash[:notice] %>
+        </div>
+      <% elsif flash[:error] %>
+        <div class="alert alert-error">
+          <button type="button" class="close" data-dismiss="alert">&times;</button>
+          <%= flash[:error] %>
+        </div>
+      <% elsif flash[:alert] %>
+        <div class="alert">
+          <button type="button" class="close" data-dismiss="alert">&times;</button>
+          <%= flash[:alert] %>
+        </div>
       <% end %>
+      <% if user_signed_in? %>
+        <div class="picture">
+          <%= image_tag "logo.svg" %>
+        </div>
+
+
+          <div class="dropdown">
+            <button class="dropbtn"> <%= current_user.username %> </button>
+            <div class="dropdown-content">
+
+              <% if !current_user.admin? %>
+                <%= link_to 'Nouvelle commande', new_command_path%>
+              <% end %>
+
+              <%= link_to'Commandes en attente', commands_path %>
+              <%= link_to'Comande du mois', commands_during_path %>
+              <%= link_to'historique de commandes', commands_historique_path %>
+              <% if current_user.admin? %>
+                <%= link_to('gestion des utilisateur', rails_admin_path) %>
+              <% end %>
+              <%= link_to('Logout', destroy_user_session_path, method: :delete) %>
+            </div>
+          </div>
+        </div>
+    <% else %>
+      <div class="imageAcceuil">
+        <%= image_tag "logo-final.svg" %>
+        <p class="texteImage">Présentation logistique</p>
+      </div>
+      <div class="infotexte">
+        <div class="rectangletexte">
+          <div class="container">
+            <div class="row">
+              <div class="col-sm-2">
+              </div>
+              <div class="col-sm-4">
+                <br><br><h5 class="textepresent">Livraisons volumineuses ?</h5><br><br>
+                <p class="textepresent">
+                  Votre service nécessite des livraisons tout au long de la semaine ?
+                  Nous sommes heureux de travailler avec vous pour répondre au mieux à vos horaires et besoins.
+
+                  Nous opérons à l'aide de vélos cargos, 7 jours sur 7 de 8H a 23H.
+                <p><br><br>
+              </div>
+              <div class="col-sm-2">
+              </div>
+              <div class="col-sm-2 field">
+                <h2>Log in</h2>
+                <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+                  <div class="field">
+                    <%= f.label :email %><br />
+                    <%= f.email_field :email, autofocus: true, class: "form-control"  %>
+                  </div>
+
+                  <div class="field">
+                    <%= f.label :password %><br />
+                    <%= f.password_field :password, autocomplete: "off", class: "form-control"  %>
+                  </div>
+
+                  <% if devise_mapping.rememberable? -%>
+                    <div class="field">
+                      <%= f.check_box :remember_me %>
+                      <%= f.label :remember_me %>
+                    </div>
+                  <% end -%>
+
+                  <div class="actions">
+                    <%= f.submit "Log in", class:'btn btn-info btn-sm' %>
+                  </div>
+                <% end %>
+
+                <%= render "devise/shared/links" %>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
     <% end %>
+
     <%= yield %>
   </body>
 </html>

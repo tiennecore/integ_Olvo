@@ -1,82 +1,112 @@
-<%= form_for(@command) do |f| %>
-  <% if command.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(command.errors.count, "error") %> prohibited this command from being saved:</h2>
+<div class="container">
+  <%= form_for(@command) do |f| %>
+    <% if command.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= pluralize(command.errors.count, "error") %> prohibited this command from being saved:</h2>
 
-      <ul>
-      <% command.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
+        <ul>
+        <% command.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+        </ul>
+      </div>
+    <% end %>
+    <div class="row">
+
+      <div class="col-sm-8 field">
+        Adresse<br><br>
+        <%= f.text_field :adress , class: "form-control" %>
+      </div>
+      <div class="col-sm-2 field">
+        Zipcode<br><br>
+        <%= f.text_field :zipcode, class: "form-control" %>
+      </div><br>
+    </div><br>
+    <div class="row">
+      <% if !current_user.admin? %>
+
+        <div class="col-sm-3 field">
+          Date (si pas de date format ASAP)
+          <br><br>
+          <%= f.date_field :dateEnter, class: "form-control" %>
+        </div>
+        <div class="col-sm-3 field">
+          From
+          <br><br>
+          <%= f.time_field :timeEnterFrom, class: "form-control" %>
+        </div>
+        <div class="col-sm-2 field">
+          To
+          <br><br>
+          <%= f.time_field :timeEnterTo, class: "form-control" %>
+        </div>
       <% end %>
-      </ul>
+      <% if current_user.admin? %>
+        <div class="col-sm-3 _field">
+          Date modifié (<%= @command.dateFinal.strftime("%d/%m/%Y") %>)
+          <br><br>
+          <%= f.date_field :dateModif, :value => :dateFinal, class: "form-control" %>
+
+        </div>
+        <div class="col-sm-2 field">
+          From (<%= @command.timeFinalFrom.strftime("%Hh%M") %>)
+          <br><br>
+          <%= f.time_field :timeModifFrom, class: "form-control" %>
+        </div>
+        <div class="col-sm-3 field">
+          To (<%= @command.timeFinalTo.strftime("%Hh%M") %>)
+          <br><br>
+          <%= f.time_field :timeModifTo, class: "form-control" %>
+        </div>
+        <% end %>
+        <div class="col-sm-2 field">
+          Unité
+          <br><br>
+          <%= f.text_field :unit, class: "form-control" %>
+        </div>
+
+    </div><br>
+    <div class="row">
+      <div class="col-sm-7 field">
+        Commentaire<br><br>
+        <%= f.text_field :commentaire, class: "form-control" %>
+      </div>
+
+      <% if current_user.admin? %>
+          <% if @command.statewait != true %>
+            <div class="col-sm-2 check_box">
+                État<br><br>
+              <%= f.check_box :statewait %> En livraison
+            </div><br>
+          <% else %>
+            <div class="col-sm-2 check_box">
+              État <br><br>
+              <%= f.check_box :statedone %> Livré
+            </div>
+          <%end%>
+          <br><br>
+          <div class="col-sm-3 action">
+            <%= f.submit "Modification de commande",class: "btn btn-large btn-primary"%>
+          </div>
+      <% else %>
+      <br><br>
+      <div class="col-sm-3 action">
+        <%= f.submit "nouvelle commande",class: "btn btn-large btn-primary"%>
+      </div>
+      <% end %>
+    </div><br><br>
+  <% end %>
+  <% if !current_user.admin?%>
+    <h3 class="titre1">Importer des commandes par fichier csv</h3><br><br>
+    <div class="row">
+      <div class="col-sm-3"></div>
+
+        <%= form_tag import_commands_path, multipart: true do %>
+          <div class="col-sm-4"> <%= file_field_tag :file %></div>
+          <div class="col-sm-2"><%= submit_tag "Upload Commandes",class:"btn btn-large btn-primary" %></div>
+        <% end %>
+      </div><br>
     </div>
   <% end %>
-  <div class="field">
-    <%= f.label :adress %><br><br>
-    <%= f.text_field :adress , class: "form-control" %>
-  </div><br>
-  <div class="field">
-    <%= f.label :zipcode %><br><br>
-    <%= f.text_field :zipcode, class: "form-control" %>
-  </div><br>
-  <% if !current_user.admin? %>
-    <div class="field">
-      <%= f.label :dateEnterFrom %>
-      <p>si pas de date format ASAP</p>
-      <br>
-      <%= f.datetime_select :dateEnterFrom, class: "form-control" %>
-    </div><br>
-    <div class="field">
 
-      <p>To</p>
-      <br>
-      <%= f.time_select :dateEnterTo, class: "form-control" %>
-    </div><br>
-  <% end %>
-  <% if current_user.admin? %>
-    <h4> Date du client </h4>
-    <%=@command.dateEnterFrom%>
-    <%=@command.dateEnterTo%> <br>
-    <div class="field">
-
-      <p>Date modifié </p>
-      <br>
-      <%= f.date_select :dateModifFrom, class: "form-control" %>
-    </div><br>
-    <div class="field">
-      <p>From</p>
-      <br>
-      <%= f.time_select :dateModifFrom, class: "form-control" %>
-    </div><br>
-    <div class="field">
-      <p>To</p>
-      <br>
-      <%= f.time_select :dateModifTo, class: "form-control" %>
-    </div><br>
-  <% end %>
-
-  <div class="field">
-    <%= f.label :unit %><br><br>
-    <%= f.text_field :unit, class: "form-control" %>
-  </div><br>
-  <div class="field">
-    <%= f.label :commentaire %><br><br>
-    <%= f.text_field :commentaire, class: "form-control" %>
-  </div><br>
-
-  <% if current_user.admin? %>
-    <div >
-      <p>Etat</p>
-      <% if @command.statewait != true %>
-        <%= f.check_box :statewait %><p> En livraison</p> <br>
-      <%end%>
-
-      <% if @command.statewait == true %>
-        <%= f.check_box :statedone %><p> Livré</p> <br>
-      <%end%>
-    </div><br>
-  <% end %>
-
-  <div class="actions">
-    <%= f.submit %>
-  </div>
-<% end %>
+</div>

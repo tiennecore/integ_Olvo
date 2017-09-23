@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <h1>Une nouvelle commande à été faite par <%= @user.username %></h1>
+    <p>
+      <% if @command.asap == 1 %>
+        Cette commande est urgente.<br>
+      <% end %>
+      Commande :<br>
+        - adresse :<%= @command.adress%><br>
+        - commentaire : <%= @command.commentaire%><br>
+        - units : <%= @command.price * @command.unit %><br>
+        - date : <%= @command.dateFinalFrom.strftime("%d/%m/%Y")%><br>
+        - horaire de livraison : <%= @command.dateFinalFrom.strftime("%Hh%M")%> à <%= @command.dateFinalTo.strftime("%Hh%M") %><br>
+
+    </p>
+  </body>
+</html>

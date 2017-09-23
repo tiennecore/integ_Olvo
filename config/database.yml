@@ -9,6 +9,11 @@ default: &default
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   timeout: 5000
 
+#prod: &default
+#  adapter: postgresql
+#  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+#  timeout: 5000
+
 development:
   <<: *default
   database: db/development.postgresql
@@ -21,5 +26,7 @@ test:
   database: db/test.postgresql
 
 production:
-  <<: *default
+  adapter: postgresql
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  timeout: 5000
   database: db/production.postgresql

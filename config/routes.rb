@@ -7,10 +7,10 @@ Rails.application.routes.draw do
   get 'commands/during'
   get 'commands/import'
   get 'commands/export'
+  get 'commands/tuto'
   resources :commands do
     collection { post :import }
   end
-
   root 'commands#index'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
