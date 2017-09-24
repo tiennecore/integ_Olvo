@@ -6,7 +6,6 @@ git_source(:github) do |repo_name|
 end
 
 
-ruby "2.4.0"
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.1.1'
@@ -43,7 +42,7 @@ gem 'devise-i18n'
 group :production do
 
   gem 'pg', '~> 0.21.0'
-  ruby "2.4.2"
+  ruby "2.4.1"
 end
 
 group :development, :test do
@@ -53,6 +52,7 @@ group :development, :test do
   gem 'capybara', '~> 2.13'
   gem 'selenium-webdriver'
   gem 'sqlite3'
+  ruby "2.4.2"
 
 end
 
@@ -63,6 +63,8 @@ group :development do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
+  ruby "2.4.2"
+
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
