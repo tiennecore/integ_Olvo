@@ -12,7 +12,7 @@ class CommandsController < ApplicationController
   def historique
     @current_user=current_user
     @prixTotal=0
-    @commands=@current_user.commands.where(["dateFinal LIKE ? ","%#{params[:begin]}%"])
+    @commands=@current_user.commands.where(["commands.dateFinal LIKE ? ","%#{params[:begin]}%"])
     if @commands == nil
       @commands=[]
     end
