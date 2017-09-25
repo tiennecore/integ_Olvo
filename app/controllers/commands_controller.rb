@@ -13,9 +13,11 @@ class CommandsController < ApplicationController
     @current_user=current_user
     @prixTotal=0
     @commands=@current_user.commands.where(["dateFinal LIKE ? ","%#{params[:begin]}%"])
-    front_date(@commands)
-    @commands.each do |commande|
-      @prixTotal += (commande.price * commande.unit)
+    if @commands.present?
+      front_date(@commands)
+      @commands.each do |commande|
+        @prixTotal += (commande.price * commande.unit)
+      end
     end
   end
 
