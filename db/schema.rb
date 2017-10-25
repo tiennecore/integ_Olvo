@@ -14,6 +14,7 @@ ActiveRecord::Schema.define(version: 20170626225537) do
 
   create_table "commands", force: :cascade do |t|
     t.string "usercommand"
+    t.string "name"
     t.string "adress"
     t.integer "zipcode"
     t.float "price"

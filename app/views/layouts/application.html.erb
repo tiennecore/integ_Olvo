@@ -103,6 +103,8 @@ body{ background-color: #f2f2f2; }
 
   <body>
     <div class="head">
+
+      <% if user_signed_in? %>
       <% if flash[:notice] %>
         <div class="alert alert-success">
           <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -119,7 +121,6 @@ body{ background-color: #f2f2f2; }
           <%= flash[:alert] %>
         </div>
       <% end %>
-      <% if user_signed_in? %>
         <div class="picture">
           <%= image_tag "logo.svg" %>
         </div>
@@ -146,16 +147,14 @@ body{ background-color: #f2f2f2; }
     <% else %>
       <div class="imageAcceuil">
         <%= image_tag "logo-final.svg" %>
-        <p class="texteImage">Présentation logistique</p>
       </div>
       <div class="infotexte">
         <div class="rectangletexte">
           <div class="container">
             <div class="row">
-              <div class="col-sm-2">
-              </div>
-              <div class="col-sm-4">
-                <br><br><h5 class="textepresent">Livraisons volumineuses ?</h5><br><br>
+
+              <div class="col-sm-5">
+                <h4 class="textepresent" style="font-size: 24px;margin-top:20px;">Livraisons volumineuses ?</h4><br><br>
                 <p class="textepresent">
                   Votre service nécessite des livraisons tout au long de la semaine ?
                   Nous sommes heureux de travailler avec vous pour répondre au mieux à vos horaires et besoins.
@@ -163,34 +162,33 @@ body{ background-color: #f2f2f2; }
                   Nous opérons à l'aide de vélos cargos, 7 jours sur 7 de 8H a 23H.
                 <p><br><br>
               </div>
-              <div class="col-sm-2">
+              <div class="col-sm-5">
+                <h4 class="textepresent" style="font-size: 24px;margin-top:20px;"> DO MESS WITH US </h4><br>
+                <p class="textepresent"style="font-size: 16px;"> Appelez-nous <br><br> 06 76 87 31 66 <br><br> Envoyez-nous un mail<br><br> contact@olvo.fr</p>
               </div>
               <div class="col-sm-2 field">
-                <h2>Log in</h2>
+                <h3 style="color:white;">Connexion</h3>
                 <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-                  <div class="field">
-                    <%= f.label :email %><br />
-                    <%= f.email_field :email, autofocus: true, class: "form-control"  %>
+                  <div class="field"><br />
+                    <%= f.email_field :email,placeholder: "email", autofocus: true, class: "form-control"  %>
                   </div>
 
-                  <div class="field">
-                    <%= f.label :password %><br />
-                    <%= f.password_field :password, autocomplete: "off", class: "form-control"  %>
+                  <div class="field"><br>
+                    <%= f.password_field :password,placeholder:"mot de passe", autocomplete: "off", class: "form-control"  %>
                   </div>
 
                   <% if devise_mapping.rememberable? -%>
                     <div class="field">
                       <%= f.check_box :remember_me %>
-                      <%= f.label :remember_me %>
+                      <%= f.label :remember_me,style:"color:white;" %>
                     </div>
                   <% end -%>
 
                   <div class="actions">
-                    <%= f.submit "Log in", class:'btn btn-info btn-sm' %>
+                    <%= f.submit "Connexion", class:'btn btn-info btn-sm' %>
                   </div>
                 <% end %>
 
-                <%= render "devise/shared/links" %>
               </div>
 
             </div>

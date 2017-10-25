@@ -249,7 +249,7 @@ class CommandsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def command_params
 
-        params.require(:command).permit(:adress,:zipcode,:unit,:timeEnterFrom,:dateEnter ,:timeEnterTo,:dateModif,:timeModifFrom ,:timeModifTo ,:commentaire,:statewait,:statedone)
+        params.require(:command).permit(:name,:adress,:zipcode,:unit,:timeEnterFrom,:dateEnter ,:timeEnterTo,:dateModif,:timeModifFrom ,:timeModifTo ,:commentaire,:statewait,:statedone)
 
     end
 end

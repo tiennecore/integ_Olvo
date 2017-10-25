@@ -2,6 +2,7 @@ class CreateCommands < ActiveRecord::Migration[5.1]
   def change
     create_table :commands do |t|
       t.string :usercommand
+      t.string :name
       t.string :adress
       t.integer :zipcode
       t.float :price

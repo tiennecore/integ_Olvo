@@ -14,10 +14,10 @@
         <table class="table table-hover ">
           <thead>
             <tr>
+              <th class="text-center">Nom</th>
               <th class="text-center">Adresse</th>
               <th class="text-center">Zipcode</th>
               <th class="text-center">Date</th>
-              <th class="text-center">Date modifié</th>
               <th class="text-center">From</th>
               <th class="text-center">To</th>
               <th class="text-center">Format</th>
@@ -42,10 +42,10 @@
                 <% else %>
                   <tr class="danger text-center ">
                 <% end %>
+                  <td><%= command.name %></td>
                   <td><%= command.adress %></td>
                   <td><%= command.zipcode %></td>
                   <td><%= command.dateFinal.strftime("%d/%m/%Y") %></td>
-                  <td><%= command.dateModif.strftime("%d/%m/%Y") if command.dateModif? %></td>
                   <td><%= command.timeFinalFrom.strftime("%Hh%M")   %></td>
                   <td><%= command.timeFinalTo.strftime("%Hh%M")  %></td>
                   <% if command.asap != nil %>
@@ -57,7 +57,7 @@
                   <td><%= command.unit %></td>
                   <td>
                     <% if command.commentaire? %>
-                      <%= link_to('Popover test', '#', class: "popover", rel: "popover", :title => "commentaire") %>
+                      <%= button_to "commentaire", onclick:"alert('lala');"%>
                     <% end %>
                   </td>
                   <% if command.statewait != true && command.statedone != true %>

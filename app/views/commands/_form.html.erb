@@ -12,64 +12,69 @@
       </div>
     <% end %>
     <div class="row">
-
-      <div class="col-sm-8 field">
-        Adresse<br><br>
-        <%= f.text_field :adress , class: "form-control" %>
+      <div class="col-sm-1 field">
       </div>
       <div class="col-sm-2 field">
-        Zipcode<br><br>
-        <%= f.text_field :zipcode, class: "form-control" %>
-      </div><br>
+
+        <%= f.text_field :name ,placeholder:"Nom", class: "form-control" %>
+      </div>
+      <div class="col-sm-3 field">
+
+        <%= f.text_field :adress ,placeholder:"Adresse", class: "form-control" %>
+      </div>
+      <div class="col-sm-2 field">
+
+        <%= f.text_field :zipcode,placeholder:"Zipcode", class: "form-control" %>
+      </div>
+      <div class="col-sm-2 field">
+
+        <%= f.text_field :unit,placeholder:"Nombre d'unité", class: "form-control" %>
+      </div>
     </div><br>
     <div class="row">
+      <div class="col-sm-1 field">
+      </div>
       <% if !current_user.admin? %>
 
         <div class="col-sm-3 field">
-          Date (si pas de date format ASAP)
-          <br><br>
-          <%= f.date_field :dateEnter, class: "form-control" %>
+
+          <%= f.date_field :dateEnter,placeholder:"Date de livraison (/ ASAP)", class: "form-control" %>
         </div>
         <div class="col-sm-3 field">
-          From
-          <br><br>
-          <%= f.time_field :timeEnterFrom, class: "form-control" %>
+
+          <%= f.time_field :timeEnterFrom,placeholder:"Heure de début de livraison", class: "form-control" %>
         </div>
-        <div class="col-sm-2 field">
-          To
-          <br><br>
-          <%= f.time_field :timeEnterTo, class: "form-control" %>
+        <div class="col-sm-3 field">
+
+          <%= f.time_field :timeEnterTo,placeholder:"Heure de fin de livraison", class: "form-control" %>
         </div>
       <% end %>
       <% if current_user.admin? %>
         <div class="col-sm-3 _field">
           Date modifié (<%= @command.dateFinal.strftime("%d/%m/%Y") %>)
           <br><br>
-          <%= f.date_field :dateModif, :value => :dateFinal, class: "form-control" %>
+          <%= f.date_field :dateModif,placeholder:"Date de modification", :value => :dateFinal, class: "form-control" %>
 
         </div>
         <div class="col-sm-2 field">
           From (<%= @command.timeFinalFrom.strftime("%Hh%M") %>)
           <br><br>
-          <%= f.time_field :timeModifFrom, class: "form-control" %>
+          <%= f.time_field :timeModifFrom,placeholder:"Heure de début modifier", class: "form-control" %>
         </div>
         <div class="col-sm-3 field">
           To (<%= @command.timeFinalTo.strftime("%Hh%M") %>)
           <br><br>
-          <%= f.time_field :timeModifTo, class: "form-control" %>
+          <%= f.time_field :timeModifTo,placeholder:"Heure de fin modifier", class: "form-control" %>
         </div>
         <% end %>
-        <div class="col-sm-2 field">
-          Unité
-          <br><br>
-          <%= f.text_field :unit, class: "form-control" %>
-        </div>
+
 
     </div><br>
     <div class="row">
+      <div class="col-sm-1 field">
+      </div>
       <div class="col-sm-7 field">
-        Commentaire<br><br>
-        <%= f.text_field :commentaire, class: "form-control" %>
+        <%= f.text_field :commentaire,placeholder:"Commentaire", class: "form-control" %>
       </div>
 
       <% if current_user.admin? %>
@@ -84,12 +89,12 @@
               <%= f.check_box :statedone %> Livré
             </div>
           <%end%>
-          <br><br>
+
           <div class="col-sm-3 action">
             <%= f.submit "Modification de commande",class: "btn btn-large btn-primary"%>
           </div>
       <% else %>
-      <br><br>
+
       <div class="col-sm-3 action">
         <%= f.submit "nouvelle commande",class: "btn btn-large btn-primary"%>
       </div>
@@ -97,7 +102,7 @@
     </div><br><br>
   <% end %>
   <% if !current_user.admin?%>
-    <h3 class="titre1">Importer des commandes par fichier csv</h3><br><br>
+    <h1 class="titre1">Importer des commandes par fichier csv</h1><br><br>
     <div class="row">
       <div class="col-sm-3"></div>
 
