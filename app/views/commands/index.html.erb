@@ -14,19 +14,19 @@
         <table class="table table-hover ">
           <thead>
             <tr>
-              <th class="text-center">Nom</th>
-              <th class="text-center">Adresse</th>
-              <th class="text-center">Zipcode</th>
-              <th class="text-center">Date</th>
-              <th class="text-center">From</th>
-              <th class="text-center">To</th>
-              <th class="text-center">Format</th>
-              <th class="text-center">Prix</th>
-              <th class="text-center">Unité</th>
-              <th class="text-center">Commentaire</th>
-              <th class="text-center">État</th>
+              <th class="textcenter">Nom</th>
+              <th class="textcenter">Adresse</th>
+              <th class="textcenter">Zipcode</th>
+              <th class="textcenter">Date</th>
+              <th class="textcenter">From</th>
+              <th class="textcenter">To</th>
+              <th class="textcenter">Format</th>
+              <th class="textcenter">Prix</th>
+              <th class="textcenter">Unité</th>
+              <th class="textcenter">Commentaire</th>
+              <th class="textcenter">État</th>
               <% if current_user.admin == true %>
-                <th class="text-center">User</th>
+                <th class="textcenter">User</th>
               <% end %>
               <th colspan="4"></th>
             </tr>
@@ -57,7 +57,15 @@
                   <td><%= command.unit %></td>
                   <td>
                     <% if command.commentaire? %>
-                      <%= button_to "commentaire", onclick:"alert('lala');"%>
+                    <script>$(document).ready(function() {
+                        $('#user').hover(function() {
+                            $('#popup').show();
+                        }, function() {
+                            $('#popup').hide();
+                        });
+                    });</script>
+                    <div id='user'>com</div>
+                    <div id='popup'><%= command.commentaire %></div>
                     <% end %>
                   </td>
                   <% if command.statewait != true && command.statedone != true %>

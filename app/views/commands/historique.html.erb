@@ -11,7 +11,7 @@
     </div>
     <div class="col-sm-5 field">
       <%= form_tag commands_historique_path,:method => 'get' do %>
-        <%= month_field_tag :begin, params[:begin]%>
+        <%= month_field_tag (:begin), params[:begin]%>
         <%= submit_tag "rechercher",class:"btn btn-small btn-primary"%>
         Download:
         <%= link_to "CSV", commands_export_path(format: "csv") %>

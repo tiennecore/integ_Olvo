@@ -38,15 +38,15 @@
 
         <div class="col-sm-3 field">
 
-          <%= f.date_field :dateEnter,placeholder:"Date de livraison (/ ASAP)", class: "form-control" %>
+          <%= f.date_select :dateEnter,placeholder:"Date de livraison (/ ASAP)", class: "form-control" %>
+        </div>
+        <div class="col-sm-2 field">
+          de :
+          <%= f.time_select :timeEnterFrom,placeholder:"Heure de début de livraison", class: "form-control" %>
         </div>
         <div class="col-sm-3 field">
-
-          <%= f.time_field :timeEnterFrom,placeholder:"Heure de début de livraison", class: "form-control" %>
-        </div>
-        <div class="col-sm-3 field">
-
-          <%= f.time_field :timeEnterTo,placeholder:"Heure de fin de livraison", class: "form-control" %>
+          à :
+          <%= f.time_select :timeEnterTo,placeholder:"Heure de fin de livraison", class: "form-control" %>
         </div>
       <% end %>
       <% if current_user.admin? %>

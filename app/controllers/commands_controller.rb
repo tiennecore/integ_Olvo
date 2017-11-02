@@ -155,11 +155,7 @@ class CommandsController < ApplicationController
       end
     end
     date_actuel = DateTime.now
-    # cas de non ajout de la date
-    if @command.dateFinal == nil
-      @command.dateEnter = date_actuel
-      @command.asap = 1
-    end
+
     if @command.timeEnterFrom == nil
       @command.timeEnterFrom = date_actuel.change(hour: 11, min: 0)
     end

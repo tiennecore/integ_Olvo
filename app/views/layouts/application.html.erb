@@ -6,197 +6,190 @@
     <meta name="google-site-verification" content="zgVcsI_tM6INxSZXoWQfA50fHO9Etppg2L2kxa_-jEk" />
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   </head>
   <style>
-.dropbtn {
-    background-color: #ff2463;
-    color: white;
-    padding: 16px;
-    font-size: 16px;
-    margin-left: 0px;
-    border: none;
-    cursor: pointer;
-    border-radius: 25px 0px 0px 25px;
-}
-.head{ height:150px;}
-.picture{
-  width:20%;
-  margin-left: 5%;
-  margin-top: 2%;
-}
-.picturetuto {
-  width:20%;
-  margin-left: 10%;
-  margin-top: 2%;
-}
-.imageAcceuil{
-  width:70%;
-  padding-left: 20%;
-  padding-top: 7%;
-}
-.texteImage{
-  float:right;
-  padding-top: 2%;
-}
+    a {
+      color: #404040;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    header img {
+      margin: 2em 0 0 2em;
+      width: 17%;
+      min-width: 180px;
+      max-width: 200px;
+    }
+    ul {
+      color: #404040;
+      float: right;
+      padding-top: 25px;
+      margin-right: 20px;
+      display: block;
+      font-size: 1em;
+      text-transform: uppercase;
+    }
+    ul:hover li {
+      opacity: 1;
+    }
+    ul:hover li:nth-child(2) {
+      transition: opacity 0.7s;
+    }
+    ul:hover li:nth-child(3) {
+      transition: opacity 1.4s;
+    }
+    ul:hover li:nth-child(4) {
+      transition: opacity 2.1s;
+    }
+    ul:hover li:nth-child(5) {
+      transition: opacity 2.8;
+    }
+    ul li {
+      padding-right: 18px;
+      display: block;
+      opacity: 0;
+      transition: opacity 0.4s;
+      margin-top: 5px;
+    }
+    ul li:first-child {
+      background-position: right;
+      background-size: 8px;
+      opacity: 1;
+      background-repeat: no-repeat;
+    }
+    ul li:hover {
+      animation: bounce 0.5s;
+    }
+    @keyframes bounce {
+      0%,
+      20%,
+      60%,
+      100% {
+        -webkit-transform: translatey(0);
+        transform: translatey(0);
+      }
+      40% {
+        -webkit-transform: translatey(-2px);
+        transform: translatey(-2px);
+      }
+      80% {
+        -webkit-transform: translatey(-1px);
+        transform: translatey(-1px);
+      }
+    }
+    #loginBlock {
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      position: absolute;
+      width: 250px;
+    }
+    #login-block button {
+      margin-top: 1.8em;
+    }
+    .titre1{
+      text-align: center;
+    }
+    .titre2{
+      text-align: center;
+      margin-left: 150px;
+    }
+    .titre3 {
+      text-align: center;
+      font-size: 10em;
+      font-weight: bold;
+    }
+    .textcenter{
+      text-align: center;
+    }
+    #popup {
+      height: 100px;
+      width: 600px;
+      text-align: left;
+      vertical-align:middle;
+      background-color: #e1e1e1 ;
+      opacity: 0.5;
+      filter: alpha(opacity=50);
+      color: black;
+      display: none;
+      padding-top: 10px;
+      padding-left: 12px;
+      padding-right: 12px;
+      padding-bottom: 10px;
+      position: absolute;
+      border-style: groove;
+      border-radius: 25px 25px 25px 25px;
+    }
 
-.rectangletexte {
-  margin-top: 8%;
-  width: 80%;
-  height: 200%;
-  border-radius: 0px 25px 25px 0px;
-
-  background: #ff2463;
-
-}
-.textepresent {
-  color: white;
-  text-align: center;
-}
-
-
-.dropdown {
-    position: fixed;
-    display: inline-block;
-    width: auto;
-    right: 0;
-    padding-top:3%;
-}
-.titre1{
-  text-align: center;
-}
-.titre3 {
-  text-align: center;
-  font-size: 10em;
-  font-weight: bold;
-}
-.euro{
-  font-size: 5em;
-  font-weight: bold;
-}
-
-.dropdown-content {
-    display: none;
-    position: absolute;
-    right: 0;
-    background-color: #f9f9f9;
-    min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 1;
-    border-radius: 25px 0px 0px 25px;
-}
-
-.dropdown-content a {
-    color: black;
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
-}
-.dropdown-content a:first-child{ border-radius: 25px 0px 0px 0px;}
-.dropdown-content a:last-child{border-radius: 0px 0px 0px 25px;}
-body{ background-color: #f2f2f2; }
-.dropdown-content a:hover {background-color: #f1f1f1}
-.dropdown:hover .dropdown-content { display: block; }
-.container{
-
-}
-</style>
+  </style>
 
   <body>
-    <div class="head">
+    <header>
+      <img ><%= image_tag "logo.svg" %></img>
 
       <% if user_signed_in? %>
-      <% if flash[:notice] %>
-        <div class="alert alert-success">
-          <button type="button" class="close" data-dismiss="alert">&times;</button>
-          <%= flash[:notice] %>
-        </div>
-      <% elsif flash[:error] %>
-        <div class="alert alert-error">
-          <button type="button" class="close" data-dismiss="alert">&times;</button>
-          <%= flash[:error] %>
-        </div>
-      <% elsif flash[:alert] %>
-        <div class="alert">
-          <button type="button" class="close" data-dismiss="alert">&times;</button>
-          <%= flash[:alert] %>
-        </div>
-      <% end %>
-        <div class="picture">
-          <%= image_tag "logo.svg" %>
-        </div>
 
-
-          <div class="dropdown">
-            <button class="dropbtn"> <%= current_user.username %> </button>
-            <div class="dropdown-content">
-
-              <% if !current_user.admin? %>
-                <%= link_to 'Nouvelle commande', new_command_path%>
-              <% end %>
-
-              <%= link_to'Commandes en attente', commands_path %>
-              <%= link_to'Comande du mois', commands_during_path %>
-              <%= link_to'historique de commandes', commands_historique_path %>
-              <% if current_user.admin? %>
-                <%= link_to('gestion des utilisateur', rails_admin_path) %>
-              <% end %>
-              <%= link_to('Logout', destroy_user_session_path, method: :delete) %>
-            </div>
+        <ul>
+          <li><a><%= current_user.username %></a></li>
+            <% if !current_user.admin? %>
+              <li><%= link_to 'Nouvelle commande', new_command_path%></li>
+            <% end %>
+            <li><%= link_to'Commandes en attente', commands_path %></li>
+            <li><%= link_to'Comande du mois', commands_during_path %></li>
+            <li><%= link_to'historique de commandes', commands_historique_path %></li>
+            <% if current_user.admin? %>
+              <li><%= link_to('gestion des utilisateur', rails_admin_path) %></li>
+            <% end %>
+            <li><%= link_to('Logout', destroy_user_session_path, method: :delete) %></li>
+        </ul>
+        <% if flash[:notice] %>
+          <div class="alert alert-success">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <%= flash[:notice] %>
           </div>
-        </div>
-    <% else %>
-      <div class="imageAcceuil">
-        <%= image_tag "logo-final.svg" %>
-      </div>
-      <div class="infotexte">
-        <div class="rectangletexte">
-          <div class="container">
-            <div class="row">
-
-              <div class="col-sm-5">
-                <h4 class="textepresent" style="font-size: 24px;margin-top:20px;">Livraisons volumineuses ?</h4><br><br>
-                <p class="textepresent">
-                  Votre service nécessite des livraisons tout au long de la semaine ?
-                  Nous sommes heureux de travailler avec vous pour répondre au mieux à vos horaires et besoins.
-
-                  Nous opérons à l'aide de vélos cargos, 7 jours sur 7 de 8H a 23H.
-                <p><br><br>
-              </div>
-              <div class="col-sm-5">
-                <h4 class="textepresent" style="font-size: 24px;margin-top:20px;"> DO MESS WITH US </h4><br>
-                <p class="textepresent"style="font-size: 16px;"> Appelez-nous <br><br> 06 76 87 31 66 <br><br> Envoyez-nous un mail<br><br> contact@olvo.fr</p>
-              </div>
-              <div class="col-sm-2 field">
-                <h3 style="color:white;">Connexion</h3>
-                <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-                  <div class="field"><br />
-                    <%= f.email_field :email,placeholder: "email", autofocus: true, class: "form-control"  %>
-                  </div>
-
-                  <div class="field"><br>
-                    <%= f.password_field :password,placeholder:"mot de passe", autocomplete: "off", class: "form-control"  %>
-                  </div>
-
-                  <% if devise_mapping.rememberable? -%>
-                    <div class="field">
-                      <%= f.check_box :remember_me %>
-                      <%= f.label :remember_me,style:"color:white;" %>
-                    </div>
-                  <% end -%>
-
-                  <div class="actions">
-                    <%= f.submit "Connexion", class:'btn btn-info btn-sm' %>
-                  </div>
-                <% end %>
-
-              </div>
-
-            </div>
+        <% elsif flash[:error] %>
+          <div class="alert alert-error">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <%= flash[:error] %>
           </div>
-        </div>
-      </div>
+        <% elsif flash[:alert] %>
+          <div class="alert">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <%= flash[:alert] %>
+          </div>
+        <% end %>
+      <%else%>
+        <div id="loginBlock">
+          <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+            <div style="text-align:center;">
+          		<label for="login">Login</label>
+          	</div>
+            <div class="field"><br />
+              <%= f.email_field :email,placeholder: "email", autofocus: true, class: "form-control"  %>
+            </div>
 
-    <% end %>
+            <div class="field"><br>
+              <%= f.password_field :password,placeholder:"mot de passe", autocomplete: "off", class: "form-control"  %>
+            </div>
+            <br>
+            <% if devise_mapping.rememberable? -%>
+              <div class="field">
+                <%= f.check_box :remember_me %>
+                <label>  se rappeler de moi</label>
+              </div>
+            <% end %><br>
+            <div class="buttonConexion" style="text-align:center;">
+              <%= f.submit "Connexion", class:'btn btn-warning btn-sm' %>
+            </div>
+          <% end %>
+        </div>
+        <% end %>
+    </header>
+
+
+
 
     <%= yield %>
   </body>
