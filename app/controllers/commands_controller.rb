@@ -9,25 +9,7 @@ class CommandsController < ApplicationController
 
   end
 
-  def historique
-    @current_user=current_user
-    @prixTotal=0
-    if params[:begin]!=nil
-      @commands=@current_user.commands.where(["commands.dateFinal LIKE ? ","%#{params[:begin]}%"])
-    else
-      date_actuel = DateTime.now
-      @commands=@current_user.commands.where(["commands.dateFinal LIKE ? ",date_actuel])
 
-    end
-
-    if @commands == nil
-      @commands=[]
-    end
-    front_date(@commands)
-    @commands.each do |commande|
-      @prixTotal += (commande.price * commande.unit)
-    end
-  end
 
 # gestion des affichage par dateFinal
   def front_date (list)
@@ -107,8 +89,25 @@ class CommandsController < ApplicationController
     #création de liste de date pour l'affichage et le tri des commandes
     front_date(@commands)
   end
-  def tuto
+  
+  def historique
+    @current_user=current_user
+    @prixTotal=0
+    if params[:begin]!=nil
+      @commands=@current_user.commands.where(["commands.dateFinal LIKE ? ","%#{params[:begin]}%"])
+    else
+      date_actuel = DateTime.now
+      @commands=@current_user.commands.where(["commands.dateFinal LIKE ? ",date_actuel])
 
+    end
+
+    if @commands == nil
+      @commands=[]
+    end
+    front_date(@commands)
+    @commands.each do |commande|
+      @prixTotal += (commande.price * commande.unit)
+    end
   end
 
   def export
