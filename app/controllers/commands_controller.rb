@@ -36,7 +36,7 @@ class CommandsController < ApplicationController
     @current_user=current_user
     @prixTotal=0
     value=params[:begin]
-    if value != nil
+    if value.present?
       left, right = value.split("-").map(&:to_i)
       d = DateTime.new(left,right).beginning_of_month
       @commands=@current_user.commands.where(dateFinal: d..d.next_month)
