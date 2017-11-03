@@ -9,22 +9,6 @@ class CommandsController < ApplicationController
 
   end
 
-  def historique
-    @current_user=current_user
-    @prixTotal=0
-    value=params[:begin]
-    left, right = value.split("-").map(&:to_i)
-    d = DateTime.new(left,right).beginning_of_month
-    @commands=@current_user.commands.where(dateFinal: d..d.next_month)
-    if @commands == nil
-      @commands=[]
-    end
-    front_date(@commands)
-    @commands.each do |commande|
-      @prixTotal += (commande.price * commande.unit)
-    end
-  end
-
 # gestion des affichage par dateFinal
   def front_date (list)
     @listDate = []
@@ -45,6 +29,28 @@ class CommandsController < ApplicationController
           @listDate.push(commande.dateFinal)
         end
       end
+    end
+  end
+
+  def historique
+    @current_user=current_user
+    @prixTotal=0
+    value=params[:begin]
+    if value != nil
+      left, right = value.split("-").map(&:to_i)
+      d = DateTime.new(left,right).beginning_of_month
+      @commands=@current_user.commands.where(dateFinal: d..d.next_month)
+    else
+      actual_date=DateTime.now
+      d=DateTime.new(actual_date.strftime("%Y"),actual_date.strftime("%m")).beginning_of_month
+      @commands=@current_user.commands.where(dateFinal: d..d.next_month)
+    end
+    if @commands == nil
+      @commands=[]
+    end
+    front_date(@commands)
+    @commands.each do |commande|
+      @prixTotal += (commande.price * commande.unit)
     end
   end
 
