@@ -12,7 +12,10 @@ class CommandsController < ApplicationController
   def historique
     @current_user=current_user
     @prixTotal=0
-    @commands=@current_user.commands.where('"commands.dateFinal" LIKE ? ',"%#{params[:begin]}%")
+    value=params[:begin]
+    left, right = value.split("-").map(&:to_i)
+    d = DateTime.new(left,right).beginning_of_month
+    @commands=@current_user.commands.where(dateFinal: d..d.next_month)
     if @commands == nil
       @commands=[]
     end
