@@ -42,8 +42,7 @@ class CommandsController < ApplicationController
       @commands=@current_user.commands.where(dateFinal: d..d.next_month)
     else
       actual_date=DateTime.now
-      d=DateTime.new(actual_date.strftime("%Y"),actual_date.strftime("%m")).beginning_of_month
-      @commands=@current_user.commands.where(dateFinal: d..d.next_month)
+      @commands=@current_user.commands.where(dateFinal: actual_date)
     end
     if @commands == nil
       @commands=[]
