@@ -12,19 +12,25 @@ class CommandsController < ApplicationController
 # gestion des affichage par dateFinal
   def front_date (list)
     @listDate = []
-
+    tmplist=list.find_all { |e| e and e.dateFinal }
+    list=tmplist.uniq.sort_by { |obj| obj.dateFinal }
     if !list.empty?
-      firstDate = list.first.dateFinal
+      @firstDate = list.first.dateFinal
       list.each do |element|
-        if firstDate.strftime("%d/%m/%Y") > element.dateFinal.strftime("%d/%m/%Y")
-          firstDate = element.dateFinal
+        if @firstDate > element.dateFinal
+          @firstDate = element.dateFinal
         end
       end
 
-      @listDate.push(firstDate)
-      dateBefore = firstDate
+      dateBefore = list.first.dateFinal
+      @listDate.push(dateBefore)
       list.each do |commande|
-        if commande.dateFinal.strftime("%d/%m/%Y") > dateBefore.strftime("%d/%m/%Y")
+        if commande.dateFinal != dateBefore
+          @listDate.each do |tmpdate|
+            if commande.dateFinal == tmpdate
+              break
+            end
+          end
           dateBefore=commande.dateFinal
           @listDate.push(commande.dateFinal)
         end
@@ -42,8 +48,8 @@ class CommandsController < ApplicationController
         d = DateTime.new(left,right).beginning_of_month
         @commands=@current_user.commands.where(dateFinal: d..d.next_month)
       else
-        actual_date=DateTime.now
-        @commands=@current_user.commands.where(dateFinal: actual_date)
+        actual_date=Date.today.beginning_of_month
+        @commands=[]
       end
     else
       if value != nil
@@ -51,8 +57,7 @@ class CommandsController < ApplicationController
         d = DateTime.new(left,right).beginning_of_month
         @commands=Command.where(dateFinal: d..d.next_month)
       else
-        actual_date=DateTime.now
-        @commands=Command.where(dateFinal: actual_date)
+        @commands=[]
       end
     end
     if @commands == nil
@@ -62,6 +67,8 @@ class CommandsController < ApplicationController
     @commands.each do |commande|
       @prixTotal += (commande.price * commande.unit)
     end
+    tmpcommands=@commands.find_all { |e| e and e.timeFinalFrom }
+    @commands=tmpcommands.uniq.sort_by { |obj| obj.timeFinalFrom }
   end
 
   def init (condition1, condition2)
@@ -90,6 +97,74 @@ class CommandsController < ApplicationController
       @prixTotal += (commande.price * commande.unit)
     end
     front_date(@commands)
+    tmpcommands=@commands.find_all { |e| e and e.timeFinalFrom }
+    @commands=tmpcommands.uniq.sort_by { |obj| obj.timeFinalFrom }
+  end
+  def today
+    @prixTotal=0
+
+
+    @commands = []
+    @commandes = Command.all.order(params[:dateFinal])
+
+
+    #trie des commandes par clients
+    date=Date.today
+
+    @commandes.each do |command|
+      if( command.dateFinal==date)
+          if !current_user.admin?
+            if command.user_id == current_user.id
+              @commands.push(command)
+            end
+          else
+            @commands.push(command)
+          end
+      end
+    end
+    #créations du prix total sur les pages
+    @commands.each do |commande|
+      @prixTotal += commande.price * commande.unit
+    end
+    #création de liste de date pour l'affichage et le tri des commandes
+    front_date(@commands)
+    tmpcommands=@commands.find_all { |e| e and e.timeFinalFrom }
+    @commands=tmpcommands.uniq.sort_by { |obj| obj.timeFinalFrom }
+  end
+
+  def week
+    @prixTotal=0
+
+
+    @commands = []
+    @commandes = Command.all.order(params[:dateFinal])
+
+    dateB=Date.today.beginning_of_week(:monday)
+    @test1=dateB
+
+    dateE=Date.today.end_of_week(:monday)
+    @test2=dateE
+    #trie des commandes par clients
+    @commandes.each do |command|
+      if (command.dateFinal <= dateE && command.dateFinal >= dateB)
+          if !current_user.admin?
+            if command.user_id == current_user.id
+              @commands.push(command)
+            end
+          else
+            @commands.push(command)
+          end
+
+      end
+    end
+    #créations du prix total sur les pages
+    @commands.each do |commande|
+      @prixTotal += commande.price * commande.unit
+    end
+    #création de liste de date pour l'affichage et le tri des commandes
+    front_date(@commands)
+    tmpcommands=@commands.find_all { |e| e and e.timeFinalFrom }
+    @commands=tmpcommands.uniq.sort_by { |obj| obj.timeFinalFrom }
   end
 
   def during
@@ -118,9 +193,8 @@ class CommandsController < ApplicationController
     end
     #création de liste de date pour l'affichage et le tri des commandes
     front_date(@commands)
-  end
-  def tuto
-
+    tmpcommands=@commands.find_all { |e| e and e.timeFinalFrom }
+    @commands=tmpcommands.uniq.sort_by { |obj| obj.timeFinalFrom }
   end
 
   def export

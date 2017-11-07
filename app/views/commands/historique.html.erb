@@ -1,4 +1,10 @@
-
+<script>$(document).ready(function() {
+$('.user').hover(function() {
+  $(this).find('.popup').show();
+    }, function() {
+      $(this).find('.popup').hide();
+    });});
+</script>
 <div class="container">
   <div class="row">
       <h1 class="titre1">Historique des commandes</h1>
@@ -72,15 +78,9 @@
                     <td><%= command.price %></td>
                     <td><%= command.unit %></td>
                     <td><% if command.commentaire? %>
-                    <script>$(document).ready(function() {
-                        $('#user').hover(function() {
-                            $('#popup').show();
-                        }, function() {
-                            $('#popup').hide();
-                        });
-                    });</script>
-                    <div id='user'><span class="glyphicon glyphicon-eye-open"></span></div>
-                    <div id='popup'><%= command.commentaire %></div>
+
+                    <div class='user'><span class="glyphicon glyphicon-eye-open"></span><div class='popup'><%= command.commentaire %></div></div>
+
                     <% end %></td>
                     <% if command.statewait != true && command.statedone != true %>
                       <td>En attente</td>

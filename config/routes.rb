@@ -7,11 +7,12 @@ Rails.application.routes.draw do
   get 'commands/during'
   get 'commands/import'
   get 'commands/export'
-  get 'commands/tuto'
   resources :commands do
     collection do
       post :import
       get :historique
+      get :today
+      get :week
     end
   end
   root 'commands#index'

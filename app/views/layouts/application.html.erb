@@ -104,7 +104,7 @@
     .textcenter{
       text-align: center;
     }
-    #popup:nth-child(n) {
+    .popup {
       height: auto;
       width: auto;
       max-width: 200px;
@@ -138,10 +138,12 @@
               <li><%= link_to 'Nouvelle commande', new_command_path%></li>
             <% end %>
             <li><%= link_to'Commandes en attente', commands_path %></li>
-            <li><%= link_to'Comande du mois', commands_during_path %></li>
-            <li><%= link_to'historique de commandes', commands_historique_path %></li>
+            <li><%= link_to'Commandes du mois', edit_user_registration_path %></li>
+            <li><%= link_to'Historique de commandes', commands_historique_path %></li>
             <% if current_user.admin? %>
-              <li><%= link_to('gestion des utilisateur', rails_admin_path) %></li>
+              <li><%= link_to'Commandes du jour', today_commands_path %></li>
+              <li><%= link_to'Commandes de la semaine', week_commands_path %></li>
+              <li><%= link_to('Gestion des utilisateurs', rails_admin_path) %></li>
             <% end %>
             <li><%= link_to('Logout', destroy_user_session_path, method: :delete) %></li>
         </ul>
