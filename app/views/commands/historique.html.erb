@@ -71,7 +71,17 @@
                     <% end %>
                     <td><%= command.price %></td>
                     <td><%= command.unit %></td>
-                    <td><%= command.commentaire %></td>
+                    <td><% if command.commentaire? %>
+                    <script>$(document).ready(function() {
+                        $('#user').hover(function() {
+                            $('#popup').show();
+                        }, function() {
+                            $('#popup').hide();
+                        });
+                    });</script>
+                    <div id='user'><span class="glyphicon glyphicon-eye-open"></span></div>
+                    <div id='popup'><%= command.commentaire %></div>
+                    <% end %></td>
                     <% if command.statewait != true && command.statedone != true %>
                       <td>En attente</td>
                     <% end %>
