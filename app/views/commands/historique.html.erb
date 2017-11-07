@@ -28,6 +28,7 @@
           <table class="table table-hover ">
             <thead>
               <tr>
+                <th class="text-center">Nom</th>
                 <th class="text-center">Adresse</th>
                 <th class="text-center">Zipcode</th>
                 <th class="text-center">Date</th>
@@ -49,13 +50,14 @@
             <tbody>
               <% @commands.each do |command| %>
                 <% if  command.dateFinal.strftime("%d/%m/%Y") == date.strftime("%d/%m/%Y")%>
-                  <% if command.dateFinal.strftime("%d/%m/%Y") > DateTime.now.strftime("%d/%m/%Y") %>
+                  <% if command.dateFinal.strftime("%d/%m/%Y") > DateTime.now.strftime("%d/%m/%Y") || command.statedone == true %>
                     <tr class="active text-center">
                   <% elsif command.dateFinal.strftime("%d/%m/%Y") == DateTime.now.strftime("%d/%m/%Y") %>
                     <tr class="warning text-center ">
                   <% else %>
                     <tr class="danger text-center ">
                   <% end %>
+                    <td><%= command.name %></td>
                     <td><%= command.adress %></td>
                     <td><%= command.zipcode %></td>
                     <td><%= command.dateFinal.strftime("%d/%m/%Y") %></td>
@@ -82,9 +84,9 @@
                     <% if current_user.admin == true %>
                       <td><%= command.usercommand%></td>
                     <% end %>
-                    <% if (command.statewait != true && command.statedone != true) || current_user.admin == true %>
-                      <td><%= link_to 'Edit', edit_command_path(command), class:'btn btn-warning btn-sm' %></td>
-                      <td><%= link_to 'Destroy', command, method: :delete, data: { confirm: 'Are you sure?' }, class:'btn btn-danger btn-sm' %></td>
+                    <% if command.statedone != true && current_user.admin == true %>
+                      <td><%= link_to '', edit_command_path(command), class:'glyphicon glyphicon-edit' %></td>
+                      <td><%= link_to '', command, method: :delete, data: { confirm: 'Are you sure?' }, class:'glyphicon glyphicon-remove' %></td>
                     <% end %>
                   </tr>
                 <% end %>

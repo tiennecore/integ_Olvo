@@ -24,9 +24,42 @@ class Command < ApplicationRecord
     commandesTmp=[]
     errorImport=0
     CSV.foreach(file.path, headers: true) do |row|
-      @command = Command.create(:name => row[0],:adress => row[1],:zipcode => row[2],:dateEnter => row[3],:timeEnterFrom => row[4],:timeEnterTo => row[5], :unit => row[6],:commentaire => row[7])
+      @command = Command.create(:name => row[0],:adress => row[1],:zipcode => row[2],:unit => row[3],:dateEnter => row[4],:timeEnterFrom => row[5],:timeEnterTo => row[6],:commentaire => row[7])
+      @command.statewait=false
+      @command.statedone=false
+      user=User.find(@command.user_id)
+      if @command.zipcode.present?
+        if (@command.zipcode > 75000) && (@command.zipcode < 75021)
+          @command.price = user.price1
+        else
+          @command.price = user.price2
+        end
+      end
+      date_actuel = DateTime.now
 
+      if @command.timeEnterFrom == nil
+        @command.timeEnterFrom = date_actuel.change(hour: 11, min: 0)
+      end
+      if @command.timeEnterTo == nil
+        @command.timeEnterTo = date_actuel.change(hour: 24, min: 0)
+      end
+      @command.usercommand= user.username
+      @command.dateFinal = @command.dateEnter
+      @command.timeFinalFrom = @command.timeEnterFrom
+      @command.timeFinalTo = @command.timeEnterTo
+
+      # cas d'inversion de des horaires
+      if @command.dateEnter?
+        if @command.timeFinalFrom > @command.timeFinalTo && @command.dateEnter?
+          tmpdate=@command.dateFinal
+          tmpdate=@command.timeFinalFrom
+          @command.timeFinalFrom = @command.timeFinalTo
+          @command.timeFinalTo = tmpdate
+        end
+      end
+      @command.save
     end
+
     # check de la validité de toutes les commandes
     #commandesTmp.each do |tmp|
     #  if tmp.adress? && tmp.zipcode? && tmp.unit? && tmp.usercommand?

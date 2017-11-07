@@ -36,13 +36,24 @@ class CommandsController < ApplicationController
     @current_user=current_user
     @prixTotal=0
     value=params[:begin]
-    if value.present?
-      left, right = value.split("-").map(&:to_i)
-      d = DateTime.new(left,right).beginning_of_month
-      @commands=@current_user.commands.where(dateFinal: d..d.next_month)
+    if !current_user.admin?
+      if value != nil
+        left, right = value.split("-").map(&:to_i)
+        d = DateTime.new(left,right).beginning_of_month
+        @commands=@current_user.commands.where(dateFinal: d..d.next_month)
+      else
+        actual_date=DateTime.now
+        @commands=@current_user.commands.where(dateFinal: actual_date)
+      end
     else
-      actual_date=DateTime.now
-      @commands=@current_user.commands.where(dateFinal: actual_date)
+      if value != nil
+        left, right = value.split("-").map(&:to_i)
+        d = DateTime.new(left,right).beginning_of_month
+        @commands=Command.where(dateFinal: d..d.next_month)
+      else
+        actual_date=DateTime.now
+        @commands=Command.where(dateFinal: actual_date)
+      end
     end
     if @commands == nil
       @commands=[]
@@ -232,6 +243,7 @@ class CommandsController < ApplicationController
   def import
     @current_user = current_user
     current_user.commands.import(params[:file])
+    redirect_to commands_url, notice: 'Les commandes ont été créé.'
   end
 
 

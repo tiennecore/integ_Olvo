@@ -73,24 +73,24 @@
     <div class="row">
       <div class="col-sm-1 field">
       </div>
-      <div class="col-sm-7 field">
+      <div class="col-sm-6 field">
         <%= f.text_field :commentaire,placeholder:"Commentaire", class: "form-control" %>
       </div>
 
       <% if current_user.admin? %>
           <% if @command.statewait != true %>
-            <div class="col-sm-2 check_box">
-                État<br><br>
-              <%= f.check_box :statewait %> En livraison
+            <div class="col-sm-1 check_box">
+                État :
+              <%= f.check_box :statewait %>  En livraison
             </div><br>
           <% else %>
-            <div class="col-sm-2 check_box">
+            <div class="col-sm-1 check_box">
               État <br><br>
               <%= f.check_box :statedone %> Livré
             </div>
           <%end%>
 
-          <div class="col-sm-3 action">
+          <div class="col-sm-2 action">
             <%= f.submit "Modification de commande",class: "btn btn-large btn-primary"%>
           </div>
       <% else %>
@@ -111,6 +111,12 @@
           <div class="col-sm-2"><%= submit_tag "Upload Commandes",class:"btn btn-large btn-primary" %></div>
         <% end %>
       </div><br>
+    </div>
+    <div class="row">
+      <div class="col-sm-3"></div>
+      <div class="col-sm-6"style="text-align:center;">
+        <a href="https://docs.google.com/spreadsheets/d/1QwA9YBHkFblszkjqoBLU9lTwwuTPOHMoVNpyU560kM8/edit?usp=sharing">Model de fichier </a>(doit être sous format CSV, comporter les headers et comporter tous les champs remplis)
+      </div>
     </div>
   <% end %>
 
