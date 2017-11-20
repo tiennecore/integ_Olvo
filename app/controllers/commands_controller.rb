@@ -6,7 +6,7 @@ class CommandsController < ApplicationController
   # GET /commands.json
   def index
     init(false,false)
-
+    
   end
 
 # gestion des affichage par dateFinal

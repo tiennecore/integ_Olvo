@@ -2,23 +2,16 @@
   <div class="titre">
     <h1 class="titre1">Commandes en attente</h1>
 
-
     <br>
     <h3 class="titre2"></h3> <h1 class="titre3"> <%= @prixTotal %> </h1>
   </div>
-  <script>$(document).ready(function() {
-  $('.user').hover(function() {
-    $(this).find('.popup').show();
-      }, function() {
-        $(this).find('.popup').hide();
-      });});
-  </script>
+  
   <% @listDate.each do |date| %>
     <h2><%= date.strftime("%d/%m/%Y") %> </h2>
     <div class="media">
       <div class="media-body">
         <table class="table table-hover ">
-          <thead>
+          <thead >
             <tr>
               <th class="textcenter">Nom</th>
               <th class="textcenter">Adresse</th>
@@ -31,22 +24,24 @@
               <th class="textcenter">Unité</th>
               <th class="textcenter">Commentaire</th>
               <th class="textcenter">État</th>
+              <th class="textcenter"></th>
+
               <% if current_user.admin == true %>
                 <th class="textcenter">User</th>
               <% end %>
               <th colspan="4"></th>
             </tr>
           </thead>
+          <% @commands.each do |command| %>
+          <tbody  >
 
-          <tbody>
-            <% @commands.each do |command| %>
               <% if  command.dateFinal.strftime("%d/%m/%Y") == date.strftime("%d/%m/%Y")%>
-                <% if command.dateFinal.strftime("%d/%m/%Y") > DateTime.now.strftime("%d/%m/%Y") %>
-                  <tr class="active text-center">
+                <% if command.dateFinal > Date.today %>
+                  <tr class="active text-center" id='<%=command.id%>'>
                 <% elsif command.dateFinal.strftime("%d/%m/%Y") == DateTime.now.strftime("%d/%m/%Y") %>
-                  <tr class="warning text-center ">
+                  <tr class="warning text-center " id='<%=command.id%>'>
                 <% else %>
-                  <tr class="danger text-center ">
+                  <tr class="danger text-center " id='<%=command.id%>'>
                 <% end %>
                   <td><%= command.name %></td>
                   <td><%= command.adress %></td>
@@ -78,13 +73,18 @@
                   <% if command.statedone == true %>
                     <td>Livré</td>
                   <% end %>
+                  <td>
+                    <%= form_for(command) do |f| %>
+                      <%= f.check_box :statewait %>
+                    <%end%>
+                  </td>
                   <% if current_user.admin == true %>
                     <td><%= command.usercommand%></td>
                   <% end %>
 
                   <% if (command.statewait != true && command.statedone != true) || current_user.admin == true %>
                     <td><%= link_to '', edit_command_path(command), class:'glyphicon glyphicon-edit' %></td>
-                    <td><%= link_to '', command, method: :delete, data: { confirm: 'Are you sure?' }, class:'glyphicon glyphicon-remove' %></td>
+                    <td class='destroy' >lala<span class='glyphicon glyphicon-remove'></span></td>
                   <% end %>
                 </tr>
               <% end %>
